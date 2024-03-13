@@ -1,4 +1,7 @@
 import useFirestore from "../hooks/useFirestore";
+import useTheme from "../hooks/useTheme";
+import trash from "../assets/trash.svg";
+import pencil from "../assets/pencil.svg";
 
 export default function BookList() {
   let { useGetCollection, useDeleteDocument } = useFirestore();
@@ -16,6 +19,8 @@ export default function BookList() {
     e.preventDefault();
     await useDeleteDocument("books", id);
   };
+
+  let { isDark } = useTheme(); // Light & Dark Mode
 
   if (error) {
     return <p>{error}</p>;

@@ -1,8 +1,14 @@
 import { Link } from "react-router-dom";
+import useTheme from "../hooks/useTheme";
 
 export default function Navbar() {
+  let { isDark, changeTheme } = useTheme(); // Light & Dark Mode
   return (
-    <nav className="border border-b-1">
+    <nav
+      className={`border border-b-1 ${
+        isDark ? "bg-dbg border-primary" : "bg-white"
+      }`}
+    >
       <ul className="flex justify-between items-center p-3 max-w-6xl mx-auto">
         <li className="flex items-center gap-3">
           <svg
@@ -21,10 +27,18 @@ export default function Navbar() {
           </svg>
 
           <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
             type="text"
             placeholder="search books..."
-            className="outline-none"
+            className="outline-none px-2 py-1 rounded-lg"
           />
+          <button
+            onClick={handleSearch}
+            className="text-white bg-primary px-3 py-1 rounded-2xl flex items-center gap-1"
+          >
+            <span className="hidden md:block">Search</span>
+          </button>
         </li>
         <Link
           to="/"
@@ -75,10 +89,54 @@ export default function Navbar() {
           {/* profile image */}
           <div className="w-11">
             <img
-              src="https://64.media.tumblr.com/7e60c3c84dc8e09a364ce35d9f96f618/248740ad4a3c87fd-66/s540x810/808c9b67f54ca22b3655bfc35f0bdda64e279a58.jpg"
+              src="https://d27v83ov1up738.cloudfront.net/user-profiles/zhW65iWspiv5FRKjp465yKLiQt9kPUhd2L8UDfV0.jpg"
               alt=""
               className="w-full rounded-full"
             />
+          </div>
+          <div className="cursor-pointer">
+            {isDark && (
+              <img
+                src={lightIcon}
+                alt=""
+                className="w-8"
+                onClick={() => changeTheme("light")}
+              />
+            )}
+            {!isDark && (
+              <img
+                src={darkIcon}
+                alt=""
+                className="w-8"
+                onClick={() => changeTheme("dark")}
+              />
+            )}
+          </div>
+          <div className="space-x-3">
+            {!user && (
+              <>
+                <Link
+                  to={`/login`}
+                  className="border-2 border-primary  rounded-lg px-2 py-2 text-sm"
+                >
+                  Login
+                </Link>
+                <Link
+                  to={"/register"}
+                  className="bg-primary text-white rounded-lg px-2 py-2 text-sm"
+                >
+                  Register
+                </Link>
+              </>
+            )}
+            {!!user && (
+              <button
+                onClick={signOutUser}
+                className="bg-red-500 text-white rounded-lg px-2 py-2 text-sm"
+              >
+                Logout
+              </button>
+            )}
           </div>
         </li>
       </ul>

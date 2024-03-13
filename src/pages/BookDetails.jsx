@@ -1,10 +1,13 @@
 import { useParams } from "react-router-dom";
 import useFirestore from "../hooks/useFirestore";
+import useTheme from "../hooks/useTheme";
 
 export default function BookDetails() {
   let { id } = useParams();
   let { useGetDocument } = useFirestore();
   let { data: book, loading, error } = useGetDocument("books", id);
+
+  let { isDark } = useTheme(); // Light & Dark Mode
 
   return (
     <>

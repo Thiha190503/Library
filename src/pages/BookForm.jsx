@@ -4,6 +4,7 @@ import { db, storage } from "../firebase";
 import useFirestore from "../hooks/useFirestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { useNavigate, useParams } from "react-router-dom";
+import useTheme from "../hooks/useTheme";
 
 export default function Create() {
   let { id } = useParams;
@@ -17,6 +18,8 @@ export default function Create() {
   let [preview, setPreview] = useState("");
 
   let { useUpdateDocument, useAddCollection } = useFirestore();
+
+  let { isDark } = useTheme(); // Light & Dark Mode
 
   useEffect(() => {
     //edit form
