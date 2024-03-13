@@ -2,8 +2,17 @@ import useFirestore from "../hooks/useFirestore";
 import useTheme from "../hooks/useTheme";
 import trash from "../assets/trash.svg";
 import pencil from "../assets/pencil.svg";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function BookList() {
+  // Search
+  let location = useLocation();
+  let params = new URLSearchParams(location.search);
+  let search = params.get("search");
+  let navigate = useNavigate();
+
+  let { isDark } = useTheme(); // Light & Dark Mode
+
   let { useGetCollection, useDeleteDocument } = useFirestore();
 
   let {
@@ -19,8 +28,6 @@ export default function BookList() {
     e.preventDefault();
     await useDeleteDocument("books", id);
   };
-
-  let { isDark } = useTheme(); // Light & Dark Mode
 
   if (error) {
     return <p>{error}</p>;

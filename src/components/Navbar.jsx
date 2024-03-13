@@ -1,7 +1,20 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import useTheme from "../hooks/useTheme";
+import lightIcon from "../assets/light.svg";
+import darkIcon from "../assets/dark.svg";
+import { useState } from "react";
 
 export default function Navbar() {
+  // Search
+  let location = useLocation();
+  let params = new URLSearchParams(location.search);
+  let searchValue = params.get("search");
+  let [search, setSearch] = useState(searchValue);
+  let navigate = useNavigate();
+  let handleSearch = () => {
+    navigate("/search=" + search);
+  };
+
   let { isDark, changeTheme } = useTheme(); // Light & Dark Mode
   return (
     <nav
