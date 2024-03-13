@@ -63,7 +63,7 @@ export default function useFirestore() {
       [colName, qRef, search?.field, search?.value]
     );
 
-    return { error, data, loading };
+    return { data, loading, error };
   };
 
   let useGetDocument = (colName, id) => {
