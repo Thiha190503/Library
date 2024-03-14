@@ -1,32 +1,59 @@
-import { createBrowserRouter } from "react-router-dom";
+import {
+  Navigate,
+  RouterProvider,
+  createBrowserRouter,
+} from "react-router-dom";
 import Home from "../pages/Home";
 import Layout from "../pages/layouts/Layout";
-import BookDetails from "../pages/BookDetails";
 import BookForm from "../pages/BookForm";
+import Search from "../pages/Search";
+import Register from "../pages/Register";
+import Login from "../pages/Login";
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Layout />,
-    children: [
-      {
-        path: "/",
-        element: <Home />,
-      },
-      {
-        path: "/create",
-        element: <BookForm />,
-      },
-      {
-        path: "/edit/:id",
-        element: <BookForm />,
-      },
-      {
-        path: "/books/:id",
-        element: <BookDetails />,
-      },
-    ],
-  },
-]);
+import { useContext } from "react";
+import { AuthContext } from "../contexts/AuthContext";
+import BookDetails from "../pages/BookDetails";
 
-export default router;
+export default function index() {
+  let { authReady, user } = useContext(AuthContext);
+
+  const isAuthenticated = Boolean(user);
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Layout />,
+      children: [
+        {
+          path: "",
+          element: isAuthenticated ? <Home /> : <Navigate to="/login" />,
+        },
+        {
+          path: "/books/:id",
+          element: isAuthenticated ? <BookDetails /> : <Navigate to="/login" />,
+        },
+        {
+          path: "/create",
+          element: isAuthenticated ? <BookForm /> : <Navigate to="/login" />,
+        },
+        {
+          path: "/edit/:id",
+          element: isAuthenticated ? <BookForm /> : <Navigate to="/login" />,
+        },
+        {
+          path: "/search",
+          element: isAuthenticated ? <Search /> : <Navigate to="/login" />,
+        },
+        {
+          path: "/register",
+          element: !isAuthenticated ? <Register /> : <Navigate to="/" />,
+        },
+        {
+          path: "/login",
+          element: !isAuthenticated ? <Login /> : <Navigate to="/" />,
+        },
+      ],
+    },
+  ]);
+
+  return authReady && <RouterProvider router={router} />;
+}

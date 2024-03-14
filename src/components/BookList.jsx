@@ -3,6 +3,8 @@ import useTheme from "../hooks/useTheme";
 import trash from "../assets/trash.svg";
 import pencil from "../assets/pencil.svg";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "../contexts/AuthContext";
 
 export default function BookList() {
   // Search
@@ -11,7 +13,11 @@ export default function BookList() {
   let search = params.get("search");
   let navigate = useNavigate();
 
-  let { isDark } = useTheme(); // Light & Dark Mode
+  // Light & Dark Mode
+  let { isDark } = useTheme();
+
+  // Auth
+  let { user } = useContext(AuthContext);
 
   let { useGetCollection, useDeleteDocument } = useFirestore();
 

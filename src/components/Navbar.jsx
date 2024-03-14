@@ -2,7 +2,9 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import useTheme from "../hooks/useTheme";
 import lightIcon from "../assets/light.svg";
 import darkIcon from "../assets/dark.svg";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import useSignout from "../hooks/useSignOut";
+import { AuthContext } from "../contexts/AuthContext";
 
 export default function Navbar() {
   // Search
@@ -15,7 +17,19 @@ export default function Navbar() {
     navigate("/search=" + search);
   };
 
-  let { isDark, changeTheme } = useTheme(); // Light & Dark Mode
+  // Light & Dark Mode
+  let { isDark, changeTheme } = useTheme();
+
+  // AuthContext
+  let { user } = useContext(AuthContext);
+
+  // Log Out
+  let { logout } = useSignout();
+
+  let signOutUser = async () => {
+    await logout();
+    navigate("/login");
+  };
   return (
     <nav
       className={`border border-b-1 ${
@@ -123,6 +137,32 @@ export default function Navbar() {
                 className="w-8"
                 onClick={() => changeTheme("dark")}
               />
+            )}
+          </div>
+          <div className="space-x-3">
+            {!user && (
+              <>
+                <Link
+                  to={`/login`}
+                  className="border-2 border-primary  rounded-lg px-2 py-2 text-sm"
+                >
+                  Login
+                </Link>
+                <Link
+                  to={"/register"}
+                  className="bg-primary text-white rounded-lg px-2 py-2 text-sm"
+                >
+                  Register
+                </Link>
+              </>
+            )}
+            {!!user && (
+              <button
+                onClick={signOutUser}
+                className="bg-red-500 text-white rounded-lg px-2 py-2 text-sm"
+              >
+                Logout
+              </button>
             )}
           </div>
           <div className="space-x-3">

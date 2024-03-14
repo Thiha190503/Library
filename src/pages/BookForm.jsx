@@ -21,6 +21,9 @@ export default function Create() {
 
   let { isDark } = useTheme(); // Light & Dark Mode
 
+  // Auth
+  let { user } = useContext(AuthContext);
+
   useEffect(() => {
     //edit form
     if (id) {
